@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:github_sign_in/github_sign_in.dart';
+import './secrets.dart';
 
 class ApplicationState extends ChangeNotifier {
   ApplicationState() {
@@ -28,14 +29,16 @@ class ApplicationState extends ChangeNotifier {
     try {
       var userCred = await signInWithGitHub(context);
       print(userCred.user);
-    } on FirebaseAuthException catch (e) {}
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+    }
   }
 
   Future<UserCredential> signInWithGitHub(BuildContext context) async {
     final GitHubSignIn gitHubSignIn = GitHubSignIn(
-      clientId: '738724722abe75924f46',
-      clientSecret: '8a2b978578f66710649f8f0ef2e675b63fc221f0',
-      redirectUrl: 'https://fir-flutter-codelab-b8b32.firebaseapp.com/__/auth/handler',
+      clientId: clientId,
+      clientSecret: clientSecret,
+      redirectUrl: redirectUrl,
     );
     final result = await gitHubSignIn.signIn(context);
     final AuthCredential githubAuthCredential = GithubAuthProvider.credential(result.token);
